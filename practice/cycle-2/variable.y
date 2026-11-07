@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+int yylex();
+int yyerror(char *s);
 %}
 
 %token VALID INVALID
