@@ -14,7 +14,7 @@ void display(char action[])
     printf("\t\t%s\t\t%s\n", input + ip, action);
 }
 
-int reduce(char action[])
+int reduce(char action[], char lookahead)
 {
     /* i -> E */
     if(stack[top] == 'i')
@@ -46,6 +46,17 @@ int reduce(char action[])
         stack[top-1] == '*' ||
         stack[top-1] == '/'))
     {
+        /*
+           If current operator is + or -
+           and next input is * or /,
+           don't reduce yet.
+        */
+        if((stack[top-1] == '+' || stack[top-1] == '-') &&
+           (lookahead == '*' || lookahead == '/'))
+        {
+            return 0;
+        }
+
         top -= 2;
         stack[top] = 'E';
 
@@ -73,17 +84,18 @@ int main()
     while(input[ip] != '$')
     {
         stack[++top] = input[ip++];
+
         display("Shift");
 
         /* Reduce whenever possible */
-        while(reduce(action))
+        while(reduce(action, input[ip]))
         {
             display(action);
         }
     }
 
     /* Final reductions */
-    while(reduce(action))
+    while(reduce(action, input[ip]))
     {
         display(action);
     }
