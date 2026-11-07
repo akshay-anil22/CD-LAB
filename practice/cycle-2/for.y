@@ -39,7 +39,6 @@ body:
 
 stmt_list:
     /* epsilon */
-  | expression ';'
   | stmt_list expression ';'
   ;     
 
